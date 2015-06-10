@@ -38,6 +38,7 @@ public class DriverScript {
  
 		DriverScript startEngine = new DriverScript();
 		startEngine.execute_TestCase();
+		System.out.println("Added Git to the project");
     }
 	
 	//Second method, this is to figure out the test cases execution one by one
