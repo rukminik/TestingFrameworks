@@ -14,6 +14,9 @@ import executionEngine.DriverScript;
 			private static XSSFWorkbook ExcelWBook;
 			private static org.apache.poi.ss.usermodel.Cell Cell;
 			private static XSSFRow Row;
+			public static short cols;
+			private static int i;
+			private static String CellData;
 
 		public static void setExcelFile(String Path) throws Exception {
 			try {
@@ -37,6 +40,7 @@ import executionEngine.DriverScript;
 				 return"";
 				 }
 			 }
+		
 
 		public static int getRowCount(String SheetName){
 			int iNumber=0;
@@ -110,5 +114,34 @@ import executionEngine.DriverScript;
 					DriverScript.bResult = false;
 					}
 				}
+		
+		
+		
+		
+		public static int getCol_num(String val,String sheet_name)
+		{
+			ExcelWSheet = ExcelWBook.getSheet(sheet_name);
+			cols= ExcelWSheet.getRow(0).getLastCellNum();
+			int result = 0;
+			for(int i=0;i<=cols;i++){
+				
+				String aa=  ExcelWSheet.getRow(0).getCell(i).getStringCellValue();
+				
+				if(aa.equalsIgnoreCase(val)){
+					result=i;
+					break;
+				}
+				
+			}
+			return result;
+		}
 
+		
+		
+		
+		
+		
+		
+		
+		
 	}

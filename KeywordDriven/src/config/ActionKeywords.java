@@ -1,43 +1,59 @@
 package config;
-
+ 
 import java.util.concurrent.TimeUnit;
-
 import static executionEngine.DriverScript.OR;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import executionEngine.DriverScript;
 import utility.Log;
-
+ 
 public class ActionKeywords {
-
-	public static WebDriver driver;
-
-	public static void openBrowser(String object) {
-		try{
+ 
+		public static WebDriver driver;
+	//This block of code will decide which browser type to start
+	public static void openBrowser(String object,String data){		
 		Log.info("Opening Browser");
-		System.setProperty("webdriver.chrome.driver", ".//driver//chromedriver.exe");
-		 driver=new ChromeDriver();
-//		driver = new FirefoxDriver();
-		}catch(Exception e){
-			Log.info("Unable to open the browser"+e.getMessage());
-			DriverScript.bResult=false;
-		}
-	}
-	public static void navigate(String object) {
 		try{
-		Log.info("Navigating to URL");
-		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		driver.get(Constants.URL);
-		}catch(Exception e){
-			Log.info("Unable to Navigate "+e.getMessage());
-			DriverScript.bResult=false;
+			//If value of the parameter is Mozilla, this will execute
+			if(data.equals("Mozilla")){
+				driver=new FirefoxDriver();
+				Log.info("Mozilla browser started");
+				}
+			else if(data.equals("IE")){
+				//You may need to change the code here to start IE Driver
+				driver=new InternetExplorerDriver();
+				Log.info("IE browser started");
+				}
+			else if(data.equals("Chrome")){
+				System.setProperty("webdriver.chrome.driver", ".//driver//chromedriver.exe");
+				driver=new ChromeDriver();
+				Log.info("Chrome browser started");
+				}
+ 
+			int implicitWaitTime=(10);
+			driver.manage().timeouts().implicitlyWait(implicitWaitTime, TimeUnit.SECONDS);
+		}catch (Exception e){
+			Log.info("Not able to open the Browser --- " + e.getMessage());
+			DriverScript.bResult = false;
 		}
 	}
-	public static void click(String object){
+ 
+	public static void navigate(String object, String data){
+		try{
+			Log.info("Navigating to URL");
+			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+			//Constant Variable is used in place of URL
+			driver.get(Constants.URL);
+		}catch(Exception e){
+			Log.info("Not able to navigate --- " + e.getMessage());
+			DriverScript.bResult = false;
+			}
+		}
+ 
+	public static void click(String object, String data){
 		try{
 			Log.info("Clicking on Webelement "+ object);
 			driver.findElement(By.xpath(OR.getProperty(object))).click();
@@ -46,28 +62,18 @@ public class ActionKeywords {
  			DriverScript.bResult = false;
          	}
 		}
- 
-	public static void input_Username(String object){
+	//Now this method accepts two value (Object name & Data)
+	public static void input(String object, String data){
 		try{
-			Log.info("Entering the text in UserName");
-			driver.findElement(By.xpath(OR.getProperty(object))).sendKeys(Constants.UserName);
+			Log.info("Entering the text in " + object);
+			driver.findElement(By.xpath(OR.getProperty(object))).sendKeys(data);
 		 }catch(Exception e){
 			 Log.error("Not able to Enter UserName --- " + e.getMessage());
 			 DriverScript.bResult = false;
 		 	}
 		}
  
-	public static void input_Password(String object){
-		try{
-			Log.info("Entering the text in Password");
-			driver.findElement(By.xpath(OR.getProperty(object))).sendKeys(Constants.Password);
-		 }catch(Exception e){
-			 Log.error("Not able to Enter Password --- " + e.getMessage());
-			 DriverScript.bResult = false;
-		 	}
-		}
- 
-	public static void waitFor(String object) throws Exception{
+	public static void waitFor(String object, String data) throws Exception{
 		try{
 			Log.info("Wait for 5 seconds");
 			Thread.sleep(5000);
@@ -77,7 +83,7 @@ public class ActionKeywords {
          	}
 		}
  
-	public static void closeBrowser(String object){
+	public static void closeBrowser(String object, String data){
 		try{
 			Log.info("Closing the browser");
 			driver.quit();
